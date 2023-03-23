@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/rohan184/server/pkg/model"
+	"github.com/rohan184/server/pkg/resources"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -12,9 +13,8 @@ import (
 var db *gorm.DB
 
 func DBConnection() {
-	// dsn := "postgres://user:user@localhost:5432/crawler"
 	var err error
-	db, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open("crawler.db"), &gorm.Config{})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
@@ -23,10 +23,11 @@ func DBConnection() {
 	db.AutoMigrate(model.Crawler{})
 }
 
-func Insert(url string, wordCount int) error {
-	err := db.Create(&model.Crawler{
-		Url:       url,
-		WordCount: fmt.Sprint(wordCount),
+func Insert(resp *resources.Insight) error {
+	err := db.Table("crawlers").Create(&model.Crawler{
+		Url:       resp.URL,
+		WordCount: resp.WordCount,
+		Images:    fmt.Sprintf("%v", resp.Images),
 		Fav:       false,
 	}).Error
 	if err != nil {

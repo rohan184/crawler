@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -20,9 +19,9 @@ func Insight(c *gin.Context) {
 		return
 	}
 
-	url, wc := service.Service(r.URL)
+	resp := service.GetInsight(r.URL)
 
-	err := database.Insert(url, wc)
+	err := database.Insert(resp)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err,
@@ -30,7 +29,7 @@ func Insight(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"msg": "success", "result": fmt.Sprint(url, wc)})
+	c.JSON(http.StatusOK, gin.H{"msg": "success", "result": resp})
 }
 
 func GetInsights(c *gin.Context) {

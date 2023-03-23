@@ -8,12 +8,10 @@ import (
 func Router() *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(200, "hello world")
-	})
-
-	r.POST("/post", controller.PostResult)
-	r.GET("/result", controller.Result)
+	r.POST("/insight", controller.Insight)
+	r.GET("/insights", controller.GetInsights)
+	r.DELETE("/insight/:id", controller.RemoveInsight)
+	r.PUT("/insight/:id", controller.FavoriteInsight)
 
 	return r
 }

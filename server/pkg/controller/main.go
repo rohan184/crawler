@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rohan184/server/pkg/database"
@@ -10,7 +11,7 @@ import (
 	"github.com/rohan184/server/pkg/service"
 )
 
-func PostResult(c *gin.Context) {
+func Insight(c *gin.Context) {
 	var r resources.RequestBody
 	if err := c.ShouldBind(&r); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -32,7 +33,37 @@ func PostResult(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"msg": "success", "result": fmt.Sprint(url, wc)})
 }
 
-func Result(c *gin.Context) {
+func GetInsights(c *gin.Context) {
 	res, err := database.Query()
-	c.JSON(http.StatusOK, gin.H{"msg": fmt.Sprintf("res:%v, err:%v", res, err)})
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"msg": res})
+}
+
+func RemoveInsight(c *gin.Context) {
+	idString := c.Param("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	database.DeleteInsight(id)
+}
+
+func FavoriteInsight(c *gin.Context) {
+	idString := c.Param("id")
+	id, _ := strconv.Atoi(idString)
+	err := database.MarkInsightFav(id)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"msg": err})
+		return
+	}
 }

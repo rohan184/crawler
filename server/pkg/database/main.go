@@ -43,3 +43,11 @@ func Query() (res []model.Crawler, err error) {
 
 	return res, nil
 }
+
+func DeleteInsight(id int) error {
+	return db.Delete(&model.Crawler{}, id).Error
+}
+
+func MarkInsightFav(id int) error {
+	return db.Table("crawlers").Where("id=?", id).Update("Fav", true).Error
+}

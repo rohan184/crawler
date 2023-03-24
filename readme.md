@@ -1,5 +1,7 @@
 # How To Run
 
+## Server
+- cd server(change directory to server)
 - make run
 
 # APIs

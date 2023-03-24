@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -41,6 +42,13 @@ func GetInsights(c *gin.Context) {
 		return
 	}
 
+	if len(res) == 0 {
+		c.AbortWithStatusJSON(http.StatusOK, gin.H{
+			"msg": "no record found",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"msg": res})
 }
 
@@ -54,15 +62,22 @@ func RemoveInsight(c *gin.Context) {
 		return
 	}
 
-	database.DeleteInsight(id)
+	if err := database.DeleteInsight(id); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("an error occurred while deleting insight: %v", err)})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"msg": "successfully deleted"})
 }
 
-func FavoriteInsight(c *gin.Context) {
+func FavouriteInsight(c *gin.Context) {
 	idString := c.Param("id")
 	id, _ := strconv.Atoi(idString)
-	err := database.MarkInsightFav(id)
-	if err != nil {
+	if err := database.MarkInsightFav(id); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"msg": err})
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{"msg": "added to favourite"})
+
 }

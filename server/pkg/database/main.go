@@ -24,21 +24,19 @@ func DBConnection() {
 }
 
 func Insert(resp *resources.Insight) error {
-	err := db.Table("crawlers").Create(&model.Crawler{
+	if err := db.Table("crawlers").Create(&model.Crawler{
 		Url:       resp.URL,
 		WordCount: resp.WordCount,
 		Images:    fmt.Sprintf("%v", resp.MediaLinks),
 		Fav:       false,
-	}).Error
-	if err != nil {
+	}).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func Query() (res []model.Crawler, err error) {
-	err = db.Find(&res).Error
-	if err != nil {
+	if err = db.Find(&res).Error; err != nil {
 		return res, err
 	}
 

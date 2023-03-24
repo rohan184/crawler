@@ -11,7 +11,7 @@ func Router() *gin.Engine {
 	r.POST("/insight", controller.Insight)
 	r.GET("/insights", controller.GetInsights)
 	r.DELETE("/insight/:id", controller.RemoveInsight)
-	r.PUT("/insight/:id", controller.FavoriteInsight)
+	r.PUT("/insight/:id", controller.FavouriteInsight)
 
 	return r
 }

@@ -25,10 +25,11 @@ func DBConnection() {
 
 func Insert(resp *resources.Insight) error {
 	if err := db.Table("crawlers").Create(&model.Crawler{
-		Url:       resp.URL,
-		WordCount: resp.WordCount,
-		Images:    fmt.Sprintf("%v", resp.MediaLinks),
-		Fav:       false,
+		Url:        resp.URL,
+		WordCount:  resp.WordCount,
+		WebLinks:   fmt.Sprintf("%v", resp.WebLinks),
+		MediaLinks: fmt.Sprintf("%v", resp.MediaLinks),
+		Fav:        false,
 	}).Error; err != nil {
 		return err
 	}

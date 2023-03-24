@@ -6,8 +6,9 @@ import (
 
 type Crawler struct {
 	gorm.Model
-	Url       string
-	WordCount int
-	Images    string
-	Fav       bool
+	Url        string
+	WordCount  int
+	WebLinks   string
+	MediaLinks string
+	Fav        bool
 }

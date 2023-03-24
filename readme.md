@@ -1,3 +1,8 @@
+
+`N.B `
+- Client webpage(WIP)
+- RestAPI server is deployed on AWS EC2 
+
 # How To Run
 
 ## Server

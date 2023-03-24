@@ -27,7 +27,7 @@ func Insert(resp *resources.Insight) error {
 	err := db.Table("crawlers").Create(&model.Crawler{
 		Url:       resp.URL,
 		WordCount: resp.WordCount,
-		Images:    fmt.Sprintf("%v", resp.Images),
+		Images:    fmt.Sprintf("%v", resp.MediaLinks),
 		Fav:       false,
 	}).Error
 	if err != nil {

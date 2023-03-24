@@ -5,7 +5,8 @@ type RequestBody struct {
 }
 
 type Insight struct {
-	URL       string   `json:"url"`
-	WordCount int      `json:"wordCount"`
-	Images    []string `json:"images"`
+	URL        string   `json:"url"`
+	WordCount  int      `json:"wordCount"`
+	WebLinks   []string `json:"webLinks"`
+	MediaLinks []string `json:"images"`
 }

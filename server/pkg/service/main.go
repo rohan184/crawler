@@ -21,22 +21,28 @@ func GetInsight(url string) *resources.Insight {
 		log.Fatal(err)
 	}
 
-	imgSrcs := findImgSrcs(doc)
-
+	imgSrcs := findMediaSrcs(doc)
 	if len(imgSrcs) == 0 {
 		log.Println("no image found")
 	}
+
+	webLinks := findWebLinks(doc)
+	if len(webLinks) == 0 {
+		log.Println("no web links found")
+	}
+
 	count := countWords(doc)
 
 	return &resources.Insight{
-		URL:       url,
-		WordCount: count,
-		Images:    imgSrcs,
+		URL:        url,
+		WordCount:  count,
+		WebLinks:   webLinks,
+		MediaLinks: imgSrcs,
 	}
 
 }
 
-func findImgSrcs(n *html.Node) []string {
+func findMediaSrcs(n *html.Node) []string {
 	var srcs []string
 
 	if n.Type == html.ElementNode && n.Data == "img" {
@@ -46,8 +52,25 @@ func findImgSrcs(n *html.Node) []string {
 			}
 		}
 	}
+
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		srcs = append(srcs, findImgSrcs(c)...)
+		srcs = append(srcs, findMediaSrcs(c)...)
+	}
+	return srcs
+}
+
+func findWebLinks(n *html.Node) []string {
+	var srcs []string
+
+	if n.Type == html.ElementNode && n.Data == "a" {
+		for _, attr := range n.Attr {
+			if attr.Key == "href" {
+				srcs = append(srcs, attr.Val)
+			}
+		}
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		srcs = append(srcs, findWebLinks(c)...)
 	}
 	return srcs
 }

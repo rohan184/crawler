@@ -9,5 +9,4 @@ func main() {
 	database.DBConnection()
 
 	router.Router().Run()
-
 }
